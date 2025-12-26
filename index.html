@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card p-4 mb-4">
+    <h2 class="mb-4 text-center">Find a Patient</h2>
+    <form method="POST" action="/">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control form-control-lg" name="patient_name"
+                placeholder="Enter patient name (e.g. Smith)" value="{{ search_query }}" required>
+            <button class="btn btn-primary btn-lg" type="submit">Search</button>
+        </div>
+    </form>
+</div>
+
+{% if error_message %}
+<div class="alert alert-warning d-flex align-items-center" role="alert">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+        class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+        <path
+            d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </svg>
+    <div>
+        {{ error_message }}
+    </div>
+</div>
+{% endif %}
+
+{% if patients %}
+<div class="card">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Search Results {% if is_offline %}<span class="badge bg-secondary">Offline Mode</span>{% endif
+            %}</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Birth Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td><code>{{ patient.id }}</code></td>
+                    <td><span class="fw-bold">{{ patient.name }}</span></td>
+                    <td>
+                        {% if patient.gender == 'male' %}
+                        <span class="badge bg-info text-dark">Male</span>
+                        {% elif patient.gender == 'female' %}
+                        <span class="badge bg-danger text-light">Female</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ patient.gender }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ patient.birthDate }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% elif search_query and not error_message %}
+<div class="alert alert-info text-center" role="alert">
+    No patients found matching "<strong>{{ search_query }}</strong>".
+</div>
+{% endif %}
+
+{% endblock %}
