@@ -19,7 +19,7 @@ A simple Flask web application that allows users to search for patients using th
 1.  Clone or download this repository.
 2.  Navigate to the project directory:
     ```bash
-    cd d:/health-informatics-fhir
+    cd health-informatics-fhir
     ```
 3.  Install the required dependencies:
     ```bash
